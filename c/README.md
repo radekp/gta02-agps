@@ -75,12 +75,12 @@ COMPILING
 
 Compile programs with:
 
-    gcc -falign-struct gta02-agps-dump.c -o gta02-agps-dump
-    gcc -falign-struct gta02-agps-load.c -o gta02-load-dump
+    gcc -fpack-struct gta02-agps-dump.c -o gta02-agps-dump
+    gcc -fpack-struct gta02-agps-load.c -o gta02-load-dump
 
--falign-struct is needed, because one of the structs
+-fpack-struct is needed, because one of the structs
 in ubx.h is not properly aligned and so will be
-padded if -falign-struct is not passed.
+padded if -fpack-struct is not passed.
 
 Makefile should do the job, just type:
 
