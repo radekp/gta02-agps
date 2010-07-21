@@ -8,14 +8,14 @@
 
 int DUMP_FD;
 
-void onalarm(int signum) {
+void onalarm_load(int signum) {
     log("Device has not asked for aid data. Probably it is already set up.");
     exit(2);
 }
 
-int handle_message(int fd, GPS_UBX_HEAD_pt header, char *msg);
+int handle_message_load(int fd, GPS_UBX_HEAD_pt header, char *msg);
 
-int main(int argc, char **argv) {
+int gta_02_agps_load_main(int argc, char **argv) {
     GPS_UBX_CFG_MSG_SETCURRENT_t cfg_msg;
     
     /* parse --verbose and --help */
@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     }
 
     /* prepare CFG-MSG message */
-    cfg_msg.class = UBXID_AID_REQ / 256;
+    cfg_msg._class = UBXID_AID_REQ / 256;
     cfg_msg.msgID = UBXID_AID_REQ % 256;
     cfg_msg.rate = 1;
 
@@ -37,28 +37,34 @@ int main(int argc, char **argv) {
     
     /* set alarm. device may be already initialized and doesn't need any aid data */
     /* if it does not request it in AID_DATA_TIMEOUT_S seconds, program quits */
-    signal(SIGALRM, onalarm);
+    signal(SIGALRM, onalarm_load);
     alarm(AID_DATA_TIMEOUT_S);
     
-    ubx_read(DEV_FD_IN, handle_message);
+    ubx_read(DEV_FD_IN, handle_message_load);
     
     close(DUMP_FD);
     return 0;
 }
+
+#ifndef QTOPIA
+int main(int argc, char **argv) {
+    return gta_02_agps_load_main(argc, argv);
+}
+#endif  
 
 /*
     AID-DATA comes from chip,
     AID_ALM, AID_ELM, AID_HUI and NAV_POSECEF from file
 */
 
-int handle_message(int fd, GPS_UBX_HEAD_pt header, char *msg) {
+int handle_message_load(int fd, GPS_UBX_HEAD_pt header, char *msg) {
     GPS_UBX_AID_INI_U5__pt ini;
     GPS_UBX_NAV_POSECEF_pt posecef;
     unsigned int gps_time, gps_week, gps_second;
     
     if (fd == DEV_FD_IN && msg_is(header, UBXID_AID_DATA)) {
         /* got request for data, let's read it from file */
-        ubx_read(DUMP_FD, handle_message);
+        ubx_read(DUMP_FD, handle_message_load);
         return 1;
     }
     if (fd == DUMP_FD && msg_is(header, UBXID_AID_ALM)) {
@@ -78,7 +84,7 @@ int handle_message(int fd, GPS_UBX_HEAD_pt header, char *msg) {
         posecef = (GPS_UBX_NAV_POSECEF_pt) msg;
 
         /* construct AID_INI message initialized with 0s */
-        ini = calloc(1, sizeof(GPS_UBX_AID_INI_U5__t));
+        ini = (GPS_UBX_AID_INI_U5__t *) calloc(1, sizeof(GPS_UBX_AID_INI_U5__t));
 
         /* set last known position */
         ini->ecefXOrLat = posecef->ecefX;

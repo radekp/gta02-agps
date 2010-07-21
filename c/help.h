@@ -1,3 +1,6 @@
+#ifndef _HELP_H
+#define _HELP_H
+
 #include <string.h>
 #include <unistd.h>
 
@@ -69,3 +72,4 @@ void help() {
     write(2, help, strlen(help));
 }
 
+#endif // _HELP_H

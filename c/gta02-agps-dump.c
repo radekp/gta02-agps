@@ -15,7 +15,7 @@ int ecef_got = 0;
 char dump_buffer_start[16000];
 char *dump_buffer = dump_buffer_start;
 
-int handle_message(int fd, GPS_UBX_HEAD_pt header, char *msg);
+int handle_message_dump(int fd, GPS_UBX_HEAD_pt header, char *msg);
 
 void save_to_buffer(int UBXID, int size, char *payload) {
     char *msg;
@@ -27,12 +27,12 @@ void save_to_buffer(int UBXID, int size, char *payload) {
     free(msg);
 } 
 
-void onalarm(int signum) {
+void onalarm_dump(int signum) {
     log("Device has not sent aid data in specified time. Quitting.");
     exit(2);
 }
 
-int main(int argc, char **argv) {
+int gta02_agps_dump_main(int argc, char **argv) {
     GPS_UBX_CFG_MSG_SETCURRENT_t cfg_msg;
     int dump_fd;
     
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     parse_common_args(&argc, argv, 1, 1);
     
     /* prepare CFG-MSG message */
-    cfg_msg.class = UBXID_NAV_POSECEF / 256;
+    cfg_msg._class = UBXID_NAV_POSECEF / 256;
     cfg_msg.msgID = UBXID_NAV_POSECEF % 256;
     
     /* request AID_ALM, AID_EPH and AID_HUI */
@@ -54,11 +54,11 @@ int main(int argc, char **argv) {
 
     /* set alarm. device may be not configured correctly and can not send us valid aid data */
     /* if it does send them in AID_DATA_TIMEOUT_S seconds, program quits */
-    signal(SIGALRM, onalarm);
+    signal(SIGALRM, onalarm_dump);
     alarm(AID_DATA_TIMEOUT_S);
 
     /* start read loop */
-    ubx_read(DEV_FD_IN, handle_message);
+    ubx_read(DEV_FD_IN, handle_message_dump);
 
     /* disable alarm */
     alarm(0);
@@ -79,11 +79,17 @@ int main(int argc, char **argv) {
     return 0;
 }
 
+#ifndef QTOPIA
+int main(int argc, char **argv) {
+  return gta02_agps_dump_main(argc, argv);
+}
+#endif  
+
 /*
     Dump NAV-POSECEF, AID-ALM, AID-EPH, AID-HUI, AID-DATA messages to file
 */
 
-int handle_message(int fd, GPS_UBX_HEAD_pt header, char *msg) {
+int handle_message_dump(int fd, GPS_UBX_HEAD_pt header, char *msg) {
     if (msg_is(header, UBXID_AID_ALM)) {
         alm_got++;
         if (header->size == 40) {

@@ -15,7 +15,7 @@ typedef struct GPS_UBX_CFG_RXM_s {
 #define WAKEUP_SEQ "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xB5\x62\x02\x40\x00\x00\x42\xC8"
 #define WAKEUP_SEQ_LEN 16
 
-int main(int argc, char **argv) {
+int gta02_set_power_main(int argc, char **argv) {
     GPS_UBX_CFG_RXM_t cfg_rxm;
 
     /* parse --verbose and --help */
@@ -38,4 +38,10 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
+#ifndef QTOPIA
+int main(int argc, char **argv) {
+  return gta02_set_power_main(argc, argv);
+}
+#endif  
 

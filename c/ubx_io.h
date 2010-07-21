@@ -143,7 +143,7 @@ char *ubx_construct(int UBXID, int size, char *payload) {
 
     checksum(&header, payload, &chksum1, &chksum2);
     
-    message = malloc(size + 8);
+    message = (char *)malloc(size + 8);
     memcpy(message, &header, 6);
     memcpy(message + 6, payload, size);
     memcpy(message + 6 + size, &chksum1, 1);

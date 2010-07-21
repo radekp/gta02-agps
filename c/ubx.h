@@ -40,6 +40,10 @@
 #ifndef __PROTO_UBX_STRUCT_DEF_H_10174BF8_39D22F9A
 #define __PROTO_UBX_STRUCT_DEF_H_10174BF8_39D22F9A
 
+#ifdef	__cplusplus
+extern	"C" {
+#endif
+
 /*----------------*/
 /* Standard types */
 /*----------------*/
@@ -57,8 +61,8 @@ typedef	unsigned short		   X2;	//!<  unsigned 2 byte integer, to be interpreted 
 typedef	unsigned int		   U4;	//!<  unsigned 4 byte integer
 typedef	unsigned int		   X4;	//!<  unsigned 4 byte integer, to be interpreted as bitmask
 typedef	unsigned long long int U8;	//!<  unsigned 8 byte integer
-typedef	float				   R4;	//!<  4 byte floating point
-typedef	double				   R8;	//!<  8 byte floating point
+typedef	float				   F4;	//!<  4 byte floating point
+typedef	double				   D8;	//!<  8 byte floating point
 typedef	char				   CH;	//!<  ASCII character
 typedef	unsigned char		   L1;	//!<  1 byte logical (TRUE or FALSE only)
 typedef	unsigned short		   L2;	//!<  2 byte logical (TRUE or FALSE only)
@@ -585,9 +589,9 @@ typedef struct GPS_UBX_RXM_RAW_s
 //! Optional Sub-Structure of #GPS_UBX_RXM_RAW_t
 typedef struct GPS_UBX_RXM_RAW_CPMES_s
 {
-	R8  cpMes;                    //!< Carrier phase measurement [L1 cycles]
-	R8  prMes;                    //!< Pseudorange measurement [m]
-	R4  doMes;                    //!< Doppler measurement [Hz]
+	D8  cpMes;                    //!< Carrier phase measurement [L1 cycles]
+	D8  prMes;                    //!< Pseudorange measurement [m]
+	F4  doMes;                    //!< Doppler measurement [Hz]
 	U1  sv;                       //!< Space Vehicle Number
 	I1  mesQI;                    //!< Nav Measurements Quality Indicator:
 	I1  cno;                      //!< Signal strength C/No. (dbHz)
@@ -1013,7 +1017,7 @@ This Message's id is #UBXID_CFG_MSG
 
 typedef struct GPS_UBX_CFG_MSG_POLL_s
 {
-	U1  class;                    //!< Message Class
+	U1  _class;                    //!< Message Class
 	U1  msgID;                    //!< Message Identifier
 
 } GPS_UBX_CFG_MSG_POLL_t,*GPS_UBX_CFG_MSG_POLL_pt;
@@ -1037,7 +1041,7 @@ This Message's id is #UBXID_CFG_MSG
 
 typedef struct GPS_UBX_CFG_MSG_s
 {
-	U1  class;                    //!< Message Class
+	U1  _class;                    //!< Message Class
 	U1  msgID;                    //!< Message Identifier
 	U1  rate[4];                  //!< Send rate on I/O Target (4 Targets)
 
@@ -1060,7 +1064,7 @@ This Message's id is #UBXID_CFG_MSG
 
 typedef struct GPS_UBX_CFG_MSG_SETCURRENT_s
 {
-	U1  class;                    //!< Message Class
+	U1  _class;                    //!< Message Class
 	U1  msgID;                    //!< Message Identifier
 	U1  rate;                     //!< Send rate on current Target
 
@@ -1234,15 +1238,15 @@ This Message's id is #UBXID_CFG_DAT
 
 typedef struct GPS_UBX_CFG_DAT_CUSTOM_s
 {
-	R8  majA;                     //!< Semi-major Axis ( accepted range = 6,300,000.0 to 6,500,000.0 metres ).
-	R8  flat;                     //!< 1.0 / Flattening ( accepted range is 0.0 to 500.0 ).
-	R4  dX;                       //!< X Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
-	R4  dY;                       //!< Y Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
-	R4  dZ;                       //!< Z Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
-	R4  rotX;                     //!< Rotation about the X Axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	R4  rotY;                     //!< Rotation about the Y Axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	R4  rotZ;                     //!< Rotation about the Z Axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	R4  scale;                    //!< Scale change ( accepted range is 0.0 to 50.0 parts per million ).
+	D8  majA;                     //!< Semi-major Axis ( accepted range = 6,300,000.0 to 6,500,000.0 metres ).
+	D8  flat;                     //!< 1.0 / Flattening ( accepted range is 0.0 to 500.0 ).
+	F4  dX;                       //!< X Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
+	F4  dY;                       //!< Y Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
+	F4  dZ;                       //!< Z Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
+	F4  rotX;                     //!< Rotation about the X Axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	F4  rotY;                     //!< Rotation about the Y Axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	F4  rotZ;                     //!< Rotation about the Z Axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	F4  scale;                    //!< Scale change ( accepted range is 0.0 to 50.0 parts per million ).
 
 } GPS_UBX_CFG_DAT_CUSTOM_t,*GPS_UBX_CFG_DAT_CUSTOM_pt;
 
@@ -1265,15 +1269,15 @@ typedef struct GPS_UBX_CFG_DAT_s
 {
 	U2  datumNum;                 //!< Datum Number according to <r href=\"datum_main'>Geodetic Datums</r>
 	CH  datumName[6];             //!< ASCII String with Datum Mnemonic
-	R8  majA;                     //!< Semi-major Axis ( accepted range = 6,300,000.0 to 6,500,000.0 metres ).
-	R8  flat;                     //!< 1.0 / Flattening ( accepted range is 0.0 to 500.0 ).
-	R4  dX;                       //!< X Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
-	R4  dY;                       //!< Y Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
-	R4  dZ;                       //!< Z Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
-	R4  rotX;                     //!< Rotation about the X Axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	R4  rotY;                     //!< Rotation about the Y Axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	R4  rotZ;                     //!< Rotation about the Z Axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	R4  scale;                    //!< Scale change ( accepted range is 0.0 to 50.0 parts per million ).
+	D8  majA;                     //!< Semi-major Axis ( accepted range = 6,300,000.0 to 6,500,000.0 metres ).
+	D8  flat;                     //!< 1.0 / Flattening ( accepted range is 0.0 to 500.0 ).
+	F4  dX;                       //!< X Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
+	F4  dY;                       //!< Y Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
+	F4  dZ;                       //!< Z Axis shift at the origin ( accepted range is +/- 5000.0 metres ).
+	F4  rotX;                     //!< Rotation about the X Axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	F4  rotY;                     //!< Rotation about the Y Axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	F4  rotZ;                     //!< Rotation about the Z Axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	F4  scale;                    //!< Scale change ( accepted range is 0.0 to 50.0 parts per million ).
 
 } GPS_UBX_CFG_DAT_t,*GPS_UBX_CFG_DAT_pt;
 
@@ -2221,8 +2225,8 @@ This Message's id is #UBXID_AID_HUI
 typedef struct GPS_UBX_AID_HUI_s
 {
 	X4  health;                   //!< Bitmask, every bit represenst a GPS SV (1-32). If the bit is set the SV is healthy.
-	R8  utcA1;                    //!< UTC - parameter A1
-	R8  utcA0;                    //!< UTC - parameter A0
+	D8  utcA1;                    //!< UTC - parameter A1
+	D8  utcA0;                    //!< UTC - parameter A0
 	I4  utcTOW;                   //!< UTC - reference time of week
 	I2  utcWNT;                   //!< UTC - reference week number
 	I2  utcLS;                    //!< UTC - time difference due to leap seconds before event
@@ -2230,14 +2234,14 @@ typedef struct GPS_UBX_AID_HUI_s
 	I2  utcDN;                    //!< UTC - day of week when next leap second event occurs
 	I2  utcLSF;                   //!< UTC - time difference due to leap seconds after event
 	I2  utcSpare;                 //!< UTC - Spare to ensure structure is an multiple of 4 bytes
-	R4  klobA0;                   //!< Klobuchar - alpha 0 
-	R4  klobA1;                   //!< Klobuchar - alpha 1
-	R4  klobA2;                   //!< Klobuchar - alpha 2
-	R4  klobA3;                   //!< Klobuchar - alpha 3
-	R4  klobB0;                   //!< Klobuchar - beta 0
-	R4  klobB1;                   //!< Klobuchar - beta 1
-	R4  klobB2;                   //!< Klobuchar - beta 2
-	R4  klobB3;                   //!< Klobuchar - beta 3
+	F4  klobA0;                   //!< Klobuchar - alpha 0 
+	F4  klobA1;                   //!< Klobuchar - alpha 1
+	F4  klobA2;                   //!< Klobuchar - alpha 2
+	F4  klobA3;                   //!< Klobuchar - alpha 3
+	F4  klobB0;                   //!< Klobuchar - beta 0
+	F4  klobB1;                   //!< Klobuchar - beta 1
+	F4  klobB2;                   //!< Klobuchar - beta 2
+	F4  klobB3;                   //!< Klobuchar - beta 3
 	X4  flags;                    //!< flags
 
 } GPS_UBX_AID_HUI_t,*GPS_UBX_AID_HUI_pt;
@@ -2742,5 +2746,9 @@ typedef struct GPS_UBX_TIM_TM2_s
 
 
 #define UBXID_TIM_TM2 0x0D03 //!< message id for TIM-TM2
+
+#ifdef	__cplusplus
+};
+#endif
 	
 #endif //__PROTO_UBX_STRUCT_DEF_H__
