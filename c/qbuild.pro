@@ -3,7 +3,8 @@ TARGET=gta02-gps
 
 CONFIG+=qtopia
 DEFINES+=QTOPIA
-CFLAGS+=-fpack-struct -Wall
+MKSPEC.CFLAGS+=-fpack-struct
+MKSPEC.CXXFLAGS+=-fpack-struct
 
 # I18n info
 STRING_LANGUAGE=en_US
